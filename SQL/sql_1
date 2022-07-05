@@ -1,0 +1,36 @@
+BEGIN TRANSACTION;
+CREATE TABLE IF NOT EXISTS "Employer" (
+	"EmployerID"	INTEGER,
+	"Full Name"	TEXT,
+	"Joining Date"	DATE,
+	"Current Position"	TEXT,
+	"Department"	TEXT,
+	"Assigned Project (Client)"	TEXT,
+	PRIMARY KEY("EmployerID" AUTOINCREMENT)
+);
+CREATE TABLE IF NOT EXISTS "Services" (
+	"Software_ID"	INTEGER,
+	"Name"	TEXT,
+	"Category"	TEXT,
+	"Size"	INTEGER,
+	"Number of installments"	INTEGER,
+	PRIMARY KEY("Software_ID" AUTOINCREMENT)
+);
+CREATE TABLE IF NOT EXISTS "Software_Requests" (
+	"Request_ID"	INTEGER,
+	"Employer_ID"	INTEGER,
+	"Software_ID"	INTEGER,
+	"Request_Start_Date"	DATE,
+	"Request_Close_Date"	DATE,
+	"Status"	TEXT,
+	FOREIGN KEY("Software_ID") REFERENCES "Services"("Software_ID"),
+	FOREIGN KEY("Employer_ID") REFERENCES "Employer"("EmployerID"),
+	PRIMARY KEY("Request_ID" AUTOINCREMENT)
+);
+INSERT INTO "Employer" VALUES (1,'Krisztian Tolnai','2022-06-20','Intern','Software and Data','Xerox');
+INSERT INTO "Employer" VALUES (2,'John Smith','2022-06-19','HR Manager','HR','BP');
+INSERT INTO "Services" VALUES (1,'Photoshop','A',3,2);
+INSERT INTO "Services" VALUES (2,'Azure','B',4,1);
+INSERT INTO "Software_Requests" VALUES (1,1,1,'2022-06-22','2022-06-24','In Progress');
+INSERT INTO "Software_Requests" VALUES (2,1,2,'2022-06-23','2022-06-25','In Progress');
+COMMIT;

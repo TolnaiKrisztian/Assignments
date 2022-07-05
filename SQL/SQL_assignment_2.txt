@@ -1,0 +1,115 @@
+1)
+SELECT artists.Name AS 'Artist Name', (SELECT CASE WHEN albums.Title IS NULL THEN 'No album' ELSE albums.Title END) AS 'Album Name' FROM artists
+LEFT JOIN albums ON artists.ArtistId = albums.ArtistId
+ORDER BY artists.Name ASC;
+
+2)
+SELECT DISTINCT artists.Name AS 'Artist Name' FROM artists
+JOIN albums ON artists.ArtistId = albums.ArtistId
+ORDER BY artists.Name ASC;
+
+3)
+SELECT artists.Name AS 'Artist Name' FROM artists
+LEFT JOIN albums ON artists.ArtistId = albums.ArtistId
+WHERE albums.Title IS NULL
+ORDER BY artists.Name ASC;
+
+4)
+SELECT artists.Name AS 'Artist Name', COUNT(albums.Title) AS 'No of albums' FROM artists
+JOIN albums ON artists.ArtistId = albums.ArtistId
+GROUP BY (artists.Name)
+ORDER BY 'No of albums' DESC, 'Artist Name';
+
+5)
+SELECT artists.Name AS 'Artist Name', COUNT(albums.Title) AS 'No of albums' FROM artists
+JOIN albums ON artists.ArtistId = albums.ArtistId
+GROUP BY (artists.Name)
+HAVING COUNT(albums.Title) >= 10
+ORDER BY 'No of albums' DESC, 'Artist Name'
+;
+
+6)
+SELECT artists.Name AS 'Artist Name', COUNT(albums.Title) AS 'No of albums' FROM artists
+JOIN albums ON artists.ArtistId = albums.ArtistId
+GROUP BY (artists.Name)
+HAVING COUNT(albums.Title) >= 10
+ORDER BY 'No of albums' DESC, 'Artist Name'
+LIMIT 3
+;
+
+7)
+SELECT artists.Name AS 'Artist Name', albums.Title AS 'Album Title', tracks.Name AS 'Track' FROM artists
+JOIN albums ON artists.ArtistId = albums.ArtistId
+JOIN tracks ON albums.AlbumId = tracks.TrackId
+WHERE artists.Name= 'Santana'
+ORDER BY tracks.TrackId;
+
+8)
+SELECT employees.EmployeeId as 'Employee ID',
+(SELECT employees.FirstName || ' ' || employees.LastName) AS 'Employee Name',
+employees.Title AS 'Empyloyee Title',
+employees.ReportsTo AS 'Manager ID',
+(SELECT i.FirstName || ' ' || i.LastName) AS 'Manager Name',
+i.Title as 'Manager Title'
+FROM employees JOIN employees AS i ON i.EmployeeId = employees.ReportsTo
+ORDER BY employees.EmployeeId;
+
+9)
+CREATE VIEW top_employees
+AS
+SELECT employees.EmployeeId as 'emp_id', (employees.LastName || ' ' || employees.FirstName) AS 'emp_name', COUNT(customers.SupportRepId) AS 'cust_count' FROM employees
+JOIN customers ON employees.EmployeeId = customers.SupportRepId
+GROUP BY employees.EmployeeId
+;
+
+SELECT (SELECT emp_name FROM top_employees
+LIMIT 1) AS 'Employee Name',(customers.LastName || ' ' || customers.FirstName) AS 'Customer Name' FROM customers
+WHERE customers.SupportRepId = (SELECT emp_id FROM top_employees
+LIMIT 1);
+
+10)
+INSERT INTO media_types
+(name)
+VALUES
+('MP3');
+
+CREATE TRIGGER mp3_insert BEFORE INSERT ON tracks 
+BEGIN
+SELECT CASE
+WHEN ((SELECT MediaTypeId FROM tracks WHERE tracks.MediaTypeId = NEW.MediaTypeId) IS (SELECT media_types.MediaTypeId FROM media_types WHERE media_types.name = 'MP3'))
+THEN RAISE(ABORT, 'MP3 format is not supported')
+END;
+END; 
+
+
+
+11)
+CREATE TABLE "tracks_audit_log" (
+	"audit_ID"	INTEGER,
+	"operation"	TEXT,
+	"datetime"	TEXT,
+	"username"	TEXT,
+	"old_value"	TEXT,
+	"new_value"	TEXT,
+	PRIMARY KEY("audit_ID" AUTOINCREMENT)
+);
+
+
+CREATE TRIGGER tracks_audit_insert AFTER INSERT ON tracks
+BEGIN
+INSERT INTO tracks_audit_log (operation, datetime, username, old_value, new_value)
+VALUES ('INSERT',DATE('now'),'username1','---', NEW.Name);
+END
+
+CREATE TRIGGER tracks_audit_update AFTER UPDATE ON tracks
+BEGIN
+INSERT INTO tracks_audit_log (operation, datetime, username, old_value, new_value)
+VALUES ('UPDATE',DATE('now'),'username1',OLD.Name, NEW.Name);
+END
+
+CREATE TRIGGER tracks_audit_delete BEFORE DELETE ON tracks
+BEGIN
+INSERT INTO tracks_audit_log (operation, datetime, username, old_value, new_value)
+VALUES ('DELETE',DATE('now'),'username1',OLD.Name, '---');
+END
+
