@@ -1,0 +1,18 @@
+cd $HOME
+
+mkdir test
+
+cd test
+touch etc_log.txt
+chmod 777 etc_log.txt
+
+cd ..
+cd /etc
+ls -1alh >> /home/administrator/test/etc_log.txt
+
+ls -1alh /run >> /home/administrator/test/run_log.txt
+
+cat etc_log.txt run_log.txt >> /home/administrator/test/unsorted.txt | sort -ru /home/administrator/test/unsorted.txt > reversed.txt
+
+
+
