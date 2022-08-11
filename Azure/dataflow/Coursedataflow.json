@@ -1,0 +1,59 @@
+{
+	"name": "Coursedataflow",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "task2InputCourse",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "task2output",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "changeDateAndUpdateNullValues"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          CourseID as integer,",
+				"          CourseName as string,",
+				"          PlatformID as integer,",
+				"          Duration as integer,",
+				"          CreationDate as date,",
+				"          Tags as string,",
+				"          Photo as string,",
+				"          Active as boolean",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 derive(CreationDate = iifNull(toString(CreationDate,'yyyy-MM-dd'), \"unknown\", toString(CreationDate,'yyyy-MM-dd')),",
+				"          CourseName = iifNull(CourseName, \"unknown\", CourseName),",
+				"          Tags = iifNull(Tags, \"unknown\", Tags),",
+				"          Photo = iifNull(Photo, \"unknown\", Photo)) ~> changeDateAndUpdateNullValues",
+				"changeDateAndUpdateNullValues sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['dbo_course_transformed.csv'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}

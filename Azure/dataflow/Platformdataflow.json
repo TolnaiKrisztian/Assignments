@@ -1,0 +1,53 @@
+{
+	"name": "Platformdataflow",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "task2inputPlatform",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "task2output",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "changeDateAndUpdateNullvalues"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          PlatformID as integer,",
+				"          PlatformName as string,",
+				"          HyperlinkPath as string,",
+				"          Active as boolean",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 derive(PlatformName = iifNull(PlatformName, \"unknown\", PlatformName),",
+				"          HyperlinkPath = iifNull(HyperlinkPath, \"unknown\", HyperlinkPath)) ~> changeDateAndUpdateNullvalues",
+				"changeDateAndUpdateNullvalues sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['dbo_platform_transformed.csv'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}

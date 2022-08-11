@@ -1,0 +1,55 @@
+{
+	"name": "Certificationdataflow",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "task2InputCertification",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "task2output",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "changeDateAndUpdateNull"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          CertificationID as integer,",
+				"          UserID as integer,",
+				"          CourseID as integer,",
+				"          CompletionDuration as integer,",
+				"          CompletionDate as date,",
+				"          Active as boolean",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 derive(CompletionDate = iifNull(toString(CompletionDate,'yyyy-MM-dd'), \"unknown\", toString(CompletionDate,'yyyy-MM-dd')),",
+				"          CompletionDuration = iifNull(CompletionDuration, 0, CompletionDuration)) ~> changeDateAndUpdateNull",
+				"changeDateAndUpdateNull sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['dbo_certification_transformed.csv'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}

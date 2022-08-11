@@ -1,0 +1,56 @@
+{
+	"name": "Reviewdataflow",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "task2ImportReview",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "task2output",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "changeDateAndUpdateNull"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          ReviewID as integer,",
+				"          UserID as integer,",
+				"          CourseID as integer,",
+				"          Feedback as string,",
+				"          Positive as boolean,",
+				"          ranking as integer,",
+				"          Active as boolean",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 derive(Feedback = iifNull(Feedback, \"unknown\", Feedback),",
+				"          ranking = iifNull(ranking, 3, ranking)) ~> changeDateAndUpdateNull",
+				"changeDateAndUpdateNull sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['dbo_review_transformed.csv'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}

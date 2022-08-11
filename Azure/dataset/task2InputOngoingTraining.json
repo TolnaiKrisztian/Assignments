@@ -1,0 +1,61 @@
+{
+	"name": "task2InputOngoingTraining",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "dbo_OngoingTraining.csv",
+				"fileSystem": "rawzone"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "TrainingID",
+				"type": "String"
+			},
+			{
+				"name": "UserID",
+				"type": "String"
+			},
+			{
+				"name": "CourseID",
+				"type": "String"
+			},
+			{
+				"name": "Status",
+				"type": "String"
+			},
+			{
+				"name": "CompletionPercentage",
+				"type": "String"
+			},
+			{
+				"name": "StartDate",
+				"type": "String"
+			},
+			{
+				"name": "FinishDate",
+				"type": "String"
+			},
+			{
+				"name": "LastUpdated",
+				"type": "String"
+			},
+			{
+				"name": "Active",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

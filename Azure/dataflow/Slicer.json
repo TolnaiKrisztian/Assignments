@@ -1,0 +1,174 @@
+{
+	"name": "Slicer",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "task3InputCertification",
+						"type": "DatasetReference"
+					},
+					"name": "Certification"
+				},
+				{
+					"dataset": {
+						"referenceName": "task3InputCourse",
+						"type": "DatasetReference"
+					},
+					"name": "Course"
+				},
+				{
+					"dataset": {
+						"referenceName": "task3InputOngoingTraining",
+						"type": "DatasetReference"
+					},
+					"name": "OngoingTraining"
+				},
+				{
+					"dataset": {
+						"referenceName": "task3InputUser",
+						"type": "DatasetReference"
+					},
+					"name": "User"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "task3Export",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				},
+				{
+					"dataset": {
+						"referenceName": "task3Export",
+						"type": "DatasetReference"
+					},
+					"name": "sink2"
+				},
+				{
+					"dataset": {
+						"referenceName": "task3Export",
+						"type": "DatasetReference"
+					},
+					"name": "sink3"
+				},
+				{
+					"dataset": {
+						"referenceName": "task3Export",
+						"type": "DatasetReference"
+					},
+					"name": "sink4"
+				}
+			],
+			"transformations": [
+				{
+					"name": "filter1"
+				},
+				{
+					"name": "filter2"
+				},
+				{
+					"name": "filter3"
+				},
+				{
+					"name": "filter6"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          CertificationID as string,",
+				"          UserID as string,",
+				"          CourseID as string,",
+				"          CompletionDuration as string,",
+				"          CompletionDate as date,",
+				"          Active as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> Certification",
+				"source(output(",
+				"          CourseID as string,",
+				"          CourseName as string,",
+				"          PlatformID as string,",
+				"          Duration as string,",
+				"          CreationDate as date,",
+				"          Tags as string,",
+				"          Photo as string,",
+				"          Active as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> Course",
+				"source(output(",
+				"          TrainingID as string,",
+				"          UserID as string,",
+				"          CourseID as string,",
+				"          Status as string,",
+				"          CompletionPercentage as string,",
+				"          StartDate as date,",
+				"          FinishDate as string,",
+				"          LastUpdated as string,",
+				"          Active as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> OngoingTraining",
+				"source(output(",
+				"          UserID as string,",
+				"          EmployerNumber as string,",
+				"          CreationDate as date,",
+				"          Username as string,",
+				"          Password as string,",
+				"          Level as string,",
+				"          Active as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> User",
+				"Certification filter(year(CompletionDate) == 2020) ~> filter1",
+				"Course filter(year(CreationDate) == 2009) ~> filter2",
+				"OngoingTraining filter(year(StartDate) == 2020) ~> filter3",
+				"User filter(year(CreationDate) == 2019) ~> filter6",
+				"filter1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:[('dbo_certification_2020.csv')],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1",
+				"filter2 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['dbo_course_2009.csv'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink2",
+				"filter3 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['dbo_ongoingtraining_2020.csv'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink3",
+				"filter6 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['dbo_user_2019.csv'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink4"
+			]
+		}
+	}
+}

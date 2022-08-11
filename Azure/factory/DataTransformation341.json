@@ -1,0 +1,9 @@
+{
+	"name": "DataTransformation341",
+	"location": "northeurope",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "9c40eb90-65d4-49fa-85ec-d5ad4b92b09e",
+		"tenantId": "2f07cb72-0cb9-4c26-9e73-6fbd185696be"
+	}
+}

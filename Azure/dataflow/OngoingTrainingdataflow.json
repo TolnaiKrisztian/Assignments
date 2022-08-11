@@ -1,0 +1,60 @@
+{
+	"name": "OngoingTrainingdataflow",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "task2InputOngoingTraining",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "task2output",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "changeDateAndUpdateNull"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          TrainingID as integer,",
+				"          UserID as integer,",
+				"          CourseID as integer,",
+				"          Status as string,",
+				"          CompletionPercentage as float,",
+				"          StartDate as date,",
+				"          FinishDate as date,",
+				"          LastUpdated as date,",
+				"          Active as boolean",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 derive(StartDate = iifNull(toString(StartDate,'yyyy-MM-dd'), \"unknown\", toString(StartDate,'yyyy-MM-dd')),",
+				"          FinishDate = iifNull(toString(FinishDate,'yyyy-MM-dd'), \"unknown\", toString(FinishDate,'yyyy-MM-dd')),",
+				"          LastUpdated = iifNull(toString(LastUpdated,'yyyy-MM-dd'), \"unknown\", toString(LastUpdated,'yyyy-MM-dd')),",
+				"          Status = iifNull(Status, \"completed\", Status)) ~> changeDateAndUpdateNull",
+				"changeDateAndUpdateNull sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['dbo_ongoingtraining_transformed.csv'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}

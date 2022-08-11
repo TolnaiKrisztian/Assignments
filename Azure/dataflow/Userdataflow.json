@@ -1,0 +1,58 @@
+{
+	"name": "Userdataflow",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "task2inputUser",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "task2output",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "changeDateAndUpdateNullvalues"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          UserID as integer,",
+				"          EmployerNumber as integer,",
+				"          CreationDate as date 'yyyy-MM-dd',",
+				"          Username as string,",
+				"          Password as string,",
+				"          Level as short,",
+				"          Active as boolean",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 derive(CreationDate = iifNull(toString(CreationDate,'yyyy-MM-dd'), \"unknown\", toString(CreationDate,'yyyy-MM-dd')),",
+				"          Username = iifNull(Username, \"unknown\", Username),",
+				"          Password = iifNull(Password, \"unknown\", Password),",
+				"          Level = iifNull(Level, 1, Level)) ~> changeDateAndUpdateNullvalues",
+				"changeDateAndUpdateNullvalues sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['dbo_user_transformed.csv'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}
