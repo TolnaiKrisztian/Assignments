@@ -1,0 +1,101 @@
+ReviewID,UserID,CourseID,Feedback,Positive,ranking,Active
+1,92,87,very useful,true,1,true
+2,904,143,very useful,true,1,true
+3,822,115,easy to follow,false,1,true
+4,32,7,alright,false,3,true
+5,452,118,alright,true,1,true
+6,717,133,very useful,false,2,true
+7,210,67,super helpful,false,3,true
+8,887,74,super helpful,false,1,true
+9,127,72,super helpful,false,5,true
+10,193,150,very useful,true,4,true
+11,512,91,alright,false,1,true
+12,87,72,super helpful,false,2,true
+13,806,2,super helpful,true,4,true
+14,113,26,super helpful,false,3,true
+15,177,124,super helpful,false,1,true
+16,178,130,easy to follow,true,5,true
+17,207,81,super helpful,false,2,true
+18,450,47,super helpful,false,5,true
+19,162,87,very useful,false,2,true
+20,794,93,alright,false,1,true
+21,270,30,alright,true,4,true
+22,95,147,super helpful,false,4,true
+23,619,114,easy to follow,true,1,true
+24,593,126,very useful,true,2,true
+25,447,77,super helpful,false,4,true
+26,143,13,very useful,false,4,true
+27,82,35,alright,true,4,true
+28,289,11,alright,false,4,true
+29,696,134,boring,false,1,true
+30,903,75,boring,false,5,true
+31,306,76,alright,true,2,true
+32,874,40,very useful,true,1,true
+33,286,15,easy to follow,false,3,true
+34,761,55,easy to follow,true,5,true
+35,424,35,alright,true,5,true
+36,885,127,boring,true,5,true
+37,37,105,easy to follow,true,3,true
+38,588,82,boring,false,2,true
+39,870,56,super helpful,false,4,true
+40,14,56,alright,true,5,true
+41,471,120,super helpful,true,3,true
+42,653,5,boring,true,3,true
+43,233,16,easy to follow,false,3,true
+44,156,3,alright,true,3,true
+45,698,137,very useful,false,5,true
+46,689,113,easy to follow,false,1,true
+47,632,129,super helpful,true,2,true
+48,925,50,alright,true,5,true
+49,402,12,very useful,false,5,true
+50,683,142,very useful,true,1,true
+51,536,49,very useful,true,5,true
+52,393,6,very useful,false,5,true
+53,443,120,very useful,true,4,true
+54,661,128,boring,false,5,true
+55,992,20,alright,false,3,true
+56,762,28,boring,false,2,true
+57,221,62,super helpful,true,3,true
+58,324,33,boring,true,5,true
+59,523,112,alright,true,1,true
+60,651,11,very useful,true,5,true
+61,133,110,easy to follow,true,4,true
+62,288,136,alright,false,3,true
+63,759,108,super helpful,true,3,true
+64,943,95,super helpful,true,5,true
+65,3,123,very useful,true,3,true
+66,223,125,alright,true,4,true
+67,582,149,very useful,true,1,true
+68,373,42,alright,false,4,true
+69,2,15,very useful,true,1,true
+70,776,123,alright,true,2,true
+71,983,135,boring,true,1,true
+72,910,106,boring,false,1,true
+73,958,140,easy to follow,true,3,true
+74,33,145,boring,false,2,true
+75,291,14,very useful,true,1,true
+76,361,122,alright,true,3,true
+77,157,60,boring,false,2,true
+78,279,12,alright,false,1,true
+79,453,81,easy to follow,true,1,true
+80,331,143,boring,false,2,true
+81,200,76,easy to follow,false,4,true
+82,461,57,very useful,true,1,true
+83,760,52,easy to follow,true,2,true
+84,649,10,boring,true,2,true
+85,544,30,super helpful,false,1,true
+86,790,17,very useful,true,4,true
+87,504,135,boring,true,3,true
+88,802,43,very useful,true,4,true
+89,489,119,easy to follow,true,1,true
+90,735,130,very useful,true,2,true
+91,237,34,alright,true,5,true
+92,939,132,easy to follow,true,4,true
+93,860,20,alright,true,4,true
+94,620,2,boring,false,4,true
+95,917,21,boring,true,5,true
+96,938,71,super helpful,true,3,true
+97,742,23,alright,true,5,true
+98,930,1,super helpful,false,3,true
+99,324,126,easy to follow,true,5,true
+100,933,114,super helpful,false,1,true
